@@ -57,9 +57,17 @@ def create():
 
 @bp.get('/<name>')
 def get(name: str):
+    accept = request.headers.get('Accept', '')
+    is_json = 'application/json' in accept
+
     item = db.session.query(models.Item).filter_by(name=name).first()
     if not item:
-        return abort(404)
+        if is_json:
+            return jsonify({
+                'status': 'not-found'
+            })
+        else:
+            return abort(404)
     params = item.params
     params = {
         **params,
@@ -73,4 +81,11 @@ def get(name: str):
         'text': 'CF Error Page Editor',
         'link': f'https://virt.moe/cloudflare-error-page/editor/?from={name}',
     }
-    return render_cf_error_page(params=params, allow_html=False, use_cdn=True), 200
+    
+    if is_json:
+        return jsonify({
+            'status': 'ok',
+            'parameters': params,
+        })
+    else:
+        return render_cf_error_page(params=params, allow_html=False, use_cdn=True), 200

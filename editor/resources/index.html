@@ -41,7 +41,8 @@
           }
         })
 
-      const initialConfig = {
+      // can be changed if specified by '?from=<name>'
+      let initialConfig = {
         "html_title": "cloudflare.com | 500: Internal server error",
         "title": "Internal server error",
         "error_code": 500,
@@ -138,6 +139,30 @@
           "what_can_i_do": "Visit the site before it crashes someday."
         },
       };
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const defaultPresetName = urlParams.get('from');
+      if (defaultPresetName && defaultPresetName.indexOf('/') < 0) {
+        fetch(`../s/${defaultPresetName}`, {
+          headers: {
+            'Accept': 'application/json'
+          },
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('failed to get preset');
+          }
+          return response.json();
+        })
+        .then(result => {
+          if (result.status != 'ok') {
+            return
+          }
+          console.log(result.parameters)
+          initialConfig = result.parameters
+          loadConfig(initialConfig);
+        })
+      }
 
       /* Utilities */
       function $(id) { return document.getElementById(id); }
