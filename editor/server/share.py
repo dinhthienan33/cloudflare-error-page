@@ -100,9 +100,9 @@ def get(name: str):
         else:
             return abort(404)
     params: dict = item.params
-    params.pop('time')
-    params.pop('ray_id')
-    params.pop('client_ip')
+    params.pop('time', None)
+    params.pop('ray_id', None)
+    params.pop('client_ip', None)
     
     if is_json:
         return jsonify({
