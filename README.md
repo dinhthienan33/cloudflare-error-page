@@ -6,7 +6,7 @@ This project creates customized error pages that mimics the well-known Cloudflar
 
 ## Online Editor
 
-Here's an editor for the error page. You can try this out [here](https://virt.moe/cloudflare-error-page/editor/).
+Here's an online editor to create customized error pages. Try it out [here](https://virt.moe/cloudflare-error-page/editor/).
 
 ![Editor](https://github.com/donlon/cloudflare-error-page/blob/images/editor.png?raw=true)
 
@@ -20,7 +20,7 @@ Install `cloudflare-error-page` with pip.
 pip install git+https://github.com/donlon/cloudflare-error-page.git
 ```
 
-Then you can generate an error page based on parameters you like. (See [example.py](examples/example.py))
+Then you can generate an error page with the `render` function. ([example.py](examples/example.py))
 
 ``` Python
 import webbrowser
@@ -58,7 +58,9 @@ webbrowser.open('error.html')
 
 ![Default error page](https://github.com/donlon/cloudflare-error-page/blob/images/default.png?raw=true)
 
-You can also see this example [here](https://virt.moe/cloudflare-error-page/examples/default).
+You can also see live demo [here](https://virt.moe/cloudflare-error-page/examples/default).
+
+A demo server using Flask is also available in [flask_demo.py](examples/flask_demo.py).
 
 ### Node.js
 
@@ -69,7 +71,7 @@ You can also see this example [here](https://virt.moe/cloudflare-error-page/exam
 ### PHP
 
 ``` PHP
-// Coming soon!
+/* Coming soon! */
 ```
 
 ## More Examples
@@ -101,7 +103,7 @@ params = {
 
 ![Catastrophic infrastructure failure](https://github.com/donlon/cloudflare-error-page/blob/images/example.png?raw=true)
 
-[Link](https://virt.moe/cloudflare-error-page/examples/catastrophic)
+[Demo](https://virt.moe/cloudflare-error-page/examples/catastrophic)
 
 ### Web server is working
 
@@ -133,12 +135,7 @@ params = {
 
 ![Web server is working](https://github.com/donlon/cloudflare-error-page/blob/images/example2.png?raw=true)
 
-[Link](https://virt.moe/cloudflare-error-page/examples/working)
-
-
-### Using Flask server
-
-See [flask_demo.py](examples/flask_demo.py) for embedding the error pages into the server
+[Demo](https://virt.moe/cloudflare-error-page/examples/working)
 
 
 ## Full Parameter Reference
