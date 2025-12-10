@@ -8,7 +8,7 @@ This project creates customized error pages that mimics the well-known Cloudflar
 
 ## Online Editor
 
-Here's an online editor to create customized error pages. Try it out [here](https://virt.moe/cloudflare-error-page/editor/).
+Here's an online editor to create customized error pages. Try it out [here](https://virt.moe/cferr/editor/).
 
 ![Editor](https://github.com/donlon/cloudflare-error-page/blob/images/editor.png?raw=true)
 
@@ -60,7 +60,7 @@ webbrowser.open('error.html')
 
 ![Default error page](https://github.com/donlon/cloudflare-error-page/blob/images/default.png?raw=true)
 
-You can also see live demo [here](https://virt.moe/cloudflare-error-page/examples/default).
+You can also see live demo [here](https://virt.moe/cferr/examples/default).
 
 A demo server using Flask is also available in [flask_demo.py](examples/flask_demo.py).
 
@@ -109,7 +109,7 @@ params = {
 
 ![Catastrophic infrastructure failure](https://github.com/donlon/cloudflare-error-page/blob/images/example.png?raw=true)
 
-[Demo](https://virt.moe/cloudflare-error-page/examples/catastrophic)
+[Demo](https://virt.moe/cferr/examples/catastrophic)
 
 ### Web server is working
 
@@ -141,7 +141,7 @@ params = {
 
 ![Web server is working](https://github.com/donlon/cloudflare-error-page/blob/images/example2.png?raw=true)
 
-[Demo](https://virt.moe/cloudflare-error-page/examples/working)
+[Demo](https://virt.moe/cferr/examples/working)
 
 ## FAQ
 
