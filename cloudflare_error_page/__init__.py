@@ -106,5 +106,5 @@ def render(params: ErrorPageParams,
 
     return template.render(params=params, *args, **kwargs)
 
-
+__version__ = "0.1.0"
 __all__ = ['default_template', 'render']
