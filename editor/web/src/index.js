@@ -53,7 +53,7 @@ const PRESETS = {
     title: 'Catastrophic infrastructure failure',
     error_code: '500',
     more_information: {
-      for: 'no information',
+      for: 'no help at all',
     },
     browser_status: {
       status: 'error',
@@ -136,7 +136,10 @@ function getDefaultPresetName() {
   const key = 'from';
   let name = extractUrlParam(window.location.search, key);
   if (!name) {
-    name = extractUrlParam(window.location.hash.substr(1), key);
+    name = extractUrlParam(window.location.hash.substring(1), key);
+  }
+  if (name) {
+    name = name.replace(/[^\w\d]/g, '')
   }
   return name;
 }

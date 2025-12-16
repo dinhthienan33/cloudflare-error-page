@@ -39,7 +39,6 @@ def get_page_params(name: str) -> dict:
 @bp.route('/', defaults={'name': 'default'})
 @bp.route('/<path:name>')
 def index(name: str):
-    name = os.path.basename(name)  # keep only the base name
     lower_name = name.lower()
     if name != lower_name:
         return redirect(lower_name)

@@ -8,7 +8,7 @@ from flask import (
 )
 
 root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
-res_folder = os.path.join(root_dir, 'editor/frontend/dist')
+res_folder = os.path.join(root_dir, 'editor/web/dist')
 
 bp = Blueprint('editor', __name__, url_prefix='/')
 
