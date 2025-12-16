@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: MIT
 
-import html
 import random
 import string
 
@@ -13,48 +12,19 @@ from flask import (
     redirect,
     url_for,
 )
-from jinja2 import Environment, select_autoescape
-
-from cloudflare_error_page import (
-    default_template as cf_template,
-    render as render_cf_error_page,
-)
 
 from . import (
     db,
     limiter,
-    models
+    models,
 )
-
-from .utils import fill_cf_template_params, sanitize_page_param_links
-
-# root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
-# examples_dir = os.path.join(root_dir, 'examples')
-env = Environment(
-    autoescape=select_autoescape(),
-    trim_blocks=True,
-    lstrip_blocks=True,
+from .utils import (
+    render_extended_template,
+    sanitize_page_param_links,
 )
-template = env.from_string('''
-{% extends base %}
-
-{% block header %}
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="moe::virt" />
-<meta property="og:title" content="{{ html_title }}" />
-<meta property="og:url" content="{{ url }}" />
-<meta property="og:description" content="{{ description }}" />
-
-<meta property="twitter:card" content="summary" />
-<meta property="twitter:site" content="moe::virt" />
-<meta property="twitter:title" content="{{ html_title }}" />
-<meta property="twitter:description" content="{{ description }}" />
-{% endblock %}
-''')
 
 bp = Blueprint('share', __name__, url_prefix='/')
 bp_short = Blueprint('share_short', __name__, url_prefix='/')
-
 
 rand_charset = string.ascii_lowercase + string.digits 
 
@@ -131,15 +101,9 @@ def get(name: str):
             'text': 'CF Error Page Editor',
             'link': request.host_url[:-1] + url_for('editor.index') + f'#from={name}',
         }
-        fill_cf_template_params(params)
         sanitize_page_param_links(params)
-
-        return render_cf_error_page(params=params,
-                                    allow_html=False,
-                                    template=template,
-                                    base=cf_template,
-                                    url=request.url,
-                                    description='Cloudflare error page')
+        return render_extended_template(params=params,
+                                        allow_html=False)
 
 
 @bp.get('/<name>')

@@ -7,6 +7,12 @@ SHARE_LINK_DIGITS = 7
 # Use short share url (without '/s' path)
 SHORT_SHARE_URL = false
 
+# Icon URL for rendered pages
+PAGE_ICON_URL = ''
+
+# MIME type of page icon
+PAGE_ICON_TYPE = 'image/png'
+
 # Set to true if trust X-Forwarded-For/X-Forwarded-Proto header
 BEHIND_PROXY = true
 

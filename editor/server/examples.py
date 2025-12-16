@@ -12,8 +12,9 @@ from flask import (
 )
 
 from cloudflare_error_page import ErrorPageParams
-from cloudflare_error_page import render as render_cf_error_page
-from .utils import fill_cf_template_params
+from .utils import (
+    render_extended_template,
+)
 
 root_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../')
 examples_dir = os.path.join(root_dir, 'examples')
@@ -50,7 +51,5 @@ def index(name: str):
     if params is None:
         abort(404)
 
-    fill_cf_template_params(params)
-
     # Render the error page
-    return render_cf_error_page(params)
+    return render_extended_template(params=params)

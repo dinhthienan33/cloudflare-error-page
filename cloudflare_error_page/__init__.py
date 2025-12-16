@@ -20,6 +20,7 @@ env = Environment(
     lstrip_blocks=True,
 )
 
+# TODO: rename to base_template
 default_template: Template = env.get_template("error.html")
 
 

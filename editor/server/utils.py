@@ -1,10 +1,46 @@
 import json
 import os
+from typing import Any
 
-from cloudflare_error_page import ErrorPageParams
-from flask import request
+from cloudflare_error_page import (
+    ErrorPageParams,
+    default_template as base_template,
+    render as render_cf_error_page,
+)
+from flask import current_app, request
+from jinja2 import Environment, select_autoescape
 
 from . import root_dir
+
+env = Environment(
+    autoescape=select_autoescape(),
+    trim_blocks=True,
+    lstrip_blocks=True,
+)
+template = env.from_string('''
+{% extends base %}
+
+{% block header %}
+{% if page_icon_url %}
+{% if page_icon_type %}
+<link rel="icon" href="{{ page_icon_url }}" type="{{ page_icon_type }}">
+{% else %}
+<link rel="icon" href="{{ page_icon_url }}">
+{% endif %}
+{% endif %}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="moe::virt" />
+<meta property="og:title" content="{{ html_title }}" />
+<meta property="og:url" content="{{ url }}" />
+<meta property="og:description" content="{{ description }}" />
+
+<meta property="twitter:card" content="summary" />
+<meta property="twitter:site" content="moe::virt" />
+<meta property="twitter:title" content="{{ html_title }}" />
+<meta property="twitter:description" content="{{ description }}" />
+{% endblock %}
+''')
 
 
 loc_data: dict = None
@@ -74,3 +110,18 @@ def sanitize_page_param_links(param: ErrorPageParams):
         link = perf_sec_by.get('link')
         if link:
             perf_sec_by['link'] = sanitize_user_link(link)
+
+
+def render_extended_template(params: ErrorPageParams,
+                             *args: Any,
+                             **kwargs: Any) -> str:
+    fill_cf_template_params(params)
+    return render_cf_error_page(params=params,
+                                template=template,
+                                base=base_template,
+                                page_icon_url=current_app.config.get('PAGE_ICON_URL'),
+                                page_icon_type=current_app.config.get('PAGE_ICON_TYPE'),
+                                url=request.url,
+                                description='Cloudflare error page',
+                                *args,
+                                **kwargs)
