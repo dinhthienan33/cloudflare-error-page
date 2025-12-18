@@ -34,11 +34,17 @@ template = env.from_string('''
 <meta property="og:title" content="{{ html_title }}" />
 <meta property="og:url" content="{{ url }}" />
 <meta property="og:description" content="{{ description }}" />
+{% if page_image_url %}
+<meta property="og:image" content="{{ page_image_url }}" />
+{% endif %}
 
 <meta property="twitter:card" content="summary" />
 <meta property="twitter:site" content="moe::virt" />
 <meta property="twitter:title" content="{{ html_title }}" />
 <meta property="twitter:description" content="{{ description }}" />
+{% if page_image_url %}
+<meta property="twitter:image" content="{{ page_image_url }}" />
+{% endif %}
 {% endblock %}
 ''')
 
@@ -116,6 +122,13 @@ def render_extended_template(params: ErrorPageParams,
                              *args: Any,
                              **kwargs: Any) -> str:
     fill_cf_template_params(params)
+    page_image_id = 'ok'
+    cf_status_obj = params.get('cloudflare_status')
+    if cf_status_obj:
+        cf_status = cf_status_obj.get('status')
+        if cf_status == 'error':
+            page_image_id = 'error'
+    page_image_url = f'https://virt.moe/cferr/editor/assets/icon-{page_image_id}-large.png'
     return render_cf_error_page(params=params,
                                 template=template,
                                 base=base_template,
@@ -123,5 +136,6 @@ def render_extended_template(params: ErrorPageParams,
                                 page_icon_type=current_app.config.get('PAGE_ICON_TYPE'),
                                 url=request.url,
                                 description='Cloudflare error page',
+                                page_image_url=page_image_url,
                                 *args,
                                 **kwargs)

@@ -1,9 +1,8 @@
 /// <reference types="vite/types/importMeta.d.ts" />
 
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import { minify as htmlMinify } from 'html-minifier-terser';
-import process from 'node:process';
-
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig(({ mode }) => {
   const baseUrl = mode === 'production' ? '' : '/editor/';
@@ -38,6 +37,14 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'assets/',
+            dest: '',
+          },
+        ],
+      }),
     ],
   };
 });
