@@ -11,7 +11,6 @@ from flask import (
     current_app,
     request,
     abort,
-    jsonify,
     redirect,
     url_for,
 )
@@ -45,10 +44,10 @@ def create():
     # Simple CSRF check
     sec_fetch_site = request.headers.get('Sec-Fetch-Site')
     if sec_fetch_site is not None and sec_fetch_site != 'same-origin':
-        return jsonify({
+        return {
             'status': 'failed',
             'message': 'CSRF check failed (Sec-Fetch-Site)',
-        }), 403
+        }, 403
 
     # Accessing request.json raises 415 error if Content-Type is not application/json. This also prevents CSRF requests.
     # See https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/CSRF#avoiding_simple_requests
@@ -64,15 +63,15 @@ def create():
         db.session.commit()
     except:
         db.session.rollback()
-        return jsonify({
+        return {
             'status': 'failed',
-        })
-    return jsonify({
+        }
+    return {
         'status': 'ok',
         'name': item.name,
         'url': request.host_url[:-1] + url_for('share_short.get', name=item.name),
         # TODO: better way to handle this
-    })
+    }
 
 
 @bp_short.get('/<name>')
@@ -83,9 +82,9 @@ def get(name: str):
     item = db.session.query(models.Item).filter_by(name=name).first()
     if not item:
         if is_json:
-            return jsonify({
+            return {
                 'status': 'notfound'
-            })
+            }
         else:
             return abort(404)
     params = cast(ErrorPageParams, item.params)
@@ -94,10 +93,10 @@ def get(name: str):
     params.pop('client_ip', None)
     
     if is_json:
-        return jsonify({
+        return {
             'status': 'ok',
             'parameters': params,
-        })
+        }
     else:
         params['creator_info'] = {
             'hidden': False,

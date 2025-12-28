@@ -2,6 +2,7 @@
 
 import copy
 import os
+from pathlib import Path
 import re
 
 from flask import (
@@ -16,13 +17,14 @@ from .utils import (
     render_extended_template,
 )
 
-from . import root_dir
-examples_dir = os.path.join(root_dir, 'examples')
-# TODO: copy to current folder for packaging
-
 
 bp = Blueprint('examples', __name__, url_prefix='/')
+examples_dir = Path(__file__).parent / 'data' / 'examples'
 param_cache: dict[str, dict] = {}
+
+if not os.path.exists(examples_dir):
+    print('"example" directory does not exist. Run "hatch build" to generate.')
+    exit(1)
 
 
 def get_page_params(name: str) -> ErrorPageParams:
@@ -39,12 +41,14 @@ def get_page_params(name: str) -> ErrorPageParams:
         return None
 
 
-@bp.route('/', defaults={'name': 'default'})
+@bp.route('/')
 @bp.route('/<path:name>')
-def index(name: str):
+def index(name: str = ''):
     lower_name = name.lower()
-    if name != lower_name:
-        return redirect(lower_name)
+    if lower_name == '':
+        return redirect('default', code=301)
+    elif name != lower_name:
+        return redirect(lower_name, code=301)
     else:
         name = lower_name
 
