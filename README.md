@@ -6,6 +6,11 @@
 
 This project creates customized error pages that mimic the well-known Cloudflare error page. You can also embed it into your own website.
 
+## How the source code works
+
+- `cloudflare_error_page/__init__.py` wires Jinja2 with the bundled `templates/template.html`. The `render(params, allow_html=True, template=None)` helper copies your `params`, normalizes fields (e.g., `more_information.for_text` → `for`), fills in defaults for `time` (current UTC) and `ray_id` (random hex), and escapes the descriptive HTML when `allow_html=False`. It then renders either the default template or a custom one you pass in.
+- `templates/template.html` contains the Cloudflare look-and-feel. It reads `params` to set the page title, three status columns (browser/Cloudflare/host), the “What happened” / “What can I do?” sections, and footer items like Ray ID, client IP, and branding. Styles are inlined via `main.css`, keeping everything in a single generated file.
+
 ## Online Editor
 
 Here's an online editor to create customized error pages and example server apps. Try it out [here](https://virt.moe/cferr/editor/).
